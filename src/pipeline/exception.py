@@ -1,5 +1,4 @@
 import sys
-import os
 import logging
 
 def error_message_detail(error, error_detail):
@@ -10,10 +9,10 @@ def error_message_detail(error, error_detail):
     )
     return error_message
 
-class CustomException(BaseException, logging.LoggerAdapter):
-    def __init__(self, error_message, error, error_detail):
-        super().__init__(logging.getLogger(), {})
-        self.extra['error_message'] = error_message_detail(error, error_detail=error_detail)
+class CustomException(logging.LoggerAdapter):
+    def __init__(self, logger, error_message, error_detail):
+        super().__init__(logger, {})
+        self.extra['error_message'] = error_message_detail(error_message, error_detail=error_detail)
 
     def process(self, msg, kwargs):
         return f"{self.extra['error_message']} - {msg}", kwargs
