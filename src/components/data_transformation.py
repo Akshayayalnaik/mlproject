@@ -1,8 +1,8 @@
 import sys
 import os
-from dataclasses import dataclass
 import numpy as np
 import pandas as pd
+from dataclasses import dataclass
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
@@ -10,7 +10,6 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from src.pipeline.exception import CustomException
 from src.logger import logging
 from src.utils import save_object
-from src.components.data_ingestion import DataIngestion
 
 @dataclass
 class DataTransformationConfig:
@@ -86,10 +85,13 @@ class DataTransformation:
         except Exception as e:
             raise CustomException(e, sys)
 
-
 if __name__ == "__main__":
-    data_ingestion_obj = DataIngestion()
-    train_data_path, test_data_path = data_ingestion_obj.initiate_data_ingestion()
+    train_data_path = os.path.join('artifacts', 'train.csv')
+    test_data_path = os.path.join('artifacts', 'test.csv')
 
     data_transformation = DataTransformation()
-    train_arr, test_arr, preprocessor_file_path = data_transformation.initiate_data_transformation(train_data_path, test_data_path)
+    train_arr, test_arr, preprocessor_path = data_transformation.initiate_data_transformation(train_data_path, test_data_path)
+
+    print("Preprocessor Path:", preprocessor_path)
+    print("Train Data Shape:", train_arr.shape)
+    print("Test Data Shape:", test_arr.shape)
